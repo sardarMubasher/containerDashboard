@@ -6,13 +6,15 @@ import {images} from '../../assests/Images'
 import SimpleTextField from '../../Components/TextField/SimpleTextField'
 import IconTextField from '../../Components/TextField/IconTextField'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import { BASE_URL } from '../../Api/ApiConstant'
 
 
 const SignIn = () => {
 
 const [signFormData,setSignFormData] = useState(
   {
-    number:'',
+    PhoneNumber:'',
     username:'',
     email:'',
     password:'',
@@ -21,12 +23,13 @@ const [signFormData,setSignFormData] = useState(
 )
 
 const nav = useNavigate()
+const [successMsg,setSuccessMsg]=useState(null)
 const [error,setError] = useState(null);
 const [errorBox,setErrorBox]=useState(false)
 const [loading,setLoading] = useState(false)
-const ValidateForm=({number,email,password,confirmPassword,username})=>{
+const ValidateForm=({PhoneNumber,email,password,confirmPassword,username})=>{
 
-  if(!number || !username || !email || !password || !confirmPassword)
+  if(!PhoneNumber || !username || !email || !password || !confirmPassword)
   {
     setErrorBox(true)
     setError('Plz fiil all fields')
@@ -53,6 +56,19 @@ const ValidateForm=({number,email,password,confirmPassword,username})=>{
     setError('Password length must be greater than 6')
     return false
   }
+  if(specialChars.test(password)==false)
+  {
+    setErrorBox(true)
+    setError('Password must contain a special Character')
+    return false
+  }
+  if((/([a-z].*[A-Z])|([A-Z].*[a-z])/).test(password)==false)
+  {
+    setErrorBox(true)
+    setError('Password must contain a mix of Uppercase and Lowercase Alphabets')
+    return false
+  }
+ 
   if(password!==confirmPassword)
   {
     setErrorBox(true)
@@ -72,16 +88,43 @@ const validate = await ValidateForm(signFormData);
 if(validate)
 {
  setLoading(true)
+
+ let formData = new FormData();
+ formData.append('PhoneNumber', signFormData.PhoneNumber);
+ formData.append('UserName', signFormData.username);
+ formData.append('Email', signFormData.email);
+ formData.append('Password', signFormData.password);
+ formData.append('ConfirmPassword', signFormData.confirmPassword);
+
+ axios.post(`${BASE_URL}/Account/registerUser`,formData).then((res)=>{
+     
+  setSuccessMsg('Account Created Successfully')
+  setLoading(false)
+  setError(null)
+  setErrorBox(false)
+
+  setTimeout(()=>{
+    nav('/')
+  },300)
+
+  
+}).catch(({response})=>{
+
+ 
+    setError(response.data.error? response.data.errorerror: response.data)
+    setErrorBox(true)
+    
+    setLoading(false)
+    console.log(response);
+})
+
 }
 
 }
 
   return (
    
-   <Box sx={{display:'flex',justifyContent:'end',p:{xs:'0',sm:8},background:'url(https://wallpaperaccess.com/full/33139.jpg) no-repeat center/cover',height:'100vh',}}>
-   
- 
-     
+    <Box sx={{display:'flex',justifyContent:'end',p:{xs:'0',sm:8},background:' linear-gradient(178deg,#F4F5F800,#F4F5F8), url(https://cdn.shopify.com/s/files/1/0334/8565/2108/products/Joan_Asp_Serenity_a2f0647c-8883-4897-9623-fa68baffff4d_2048x.jpg?v=1582005160) no-repeat center/cover',height:'100vh',}}>
     
 
     <Box sx={{py:2,background:'white',width:{xs:'100%',sm:'490px'},minHeight:{xs:'100%',sm:'650px'},borderRadius:{xs:'0',sm:4},}}>
@@ -97,7 +140,7 @@ if(validate)
 
      
 
-     <SimpleTextField data={signFormData} setData={setSignFormData} type={'number'} name={'number'} label={'Phone Number'}/>
+     <SimpleTextField data={signFormData} setData={setSignFormData} type={'number'} name={'PhoneNumber'} label={'Phone Number'}/>
 
      <SimpleTextField data={signFormData} setData={setSignFormData} type={'text'} name={'username'} label={'Username'}/>
       
@@ -137,6 +180,14 @@ if(validate)
           {error}
         </Alert>
       </Snackbar>
+
+      <Snackbar anchorOrigin={{vertical:'top',horizontal:'right'}} open={successMsg?true:false} autoHideDuration={2000} onClose={()=>setSuccessMsg(null)}>
+        <Alert onClose={()=>setErrorBox(false)} severity="success" sx={{ width: '100%' }}>
+          {successMsg}
+        </Alert>
+      </Snackbar>
+
+      
  
 
 </Box>

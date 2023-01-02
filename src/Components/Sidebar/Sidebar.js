@@ -123,7 +123,7 @@ export default function MiniDrawer({expand,setExpand}) {
         </Toolbar>
       </AppBar>
       <Drawer sx={{width:240}}  variant="permanent" open={open}>
-        <DrawerHeader>
+        <DrawerHeader >
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>

@@ -4,23 +4,25 @@ import {VisibilityOutlined,VisibilityOffOutlined } from '@mui/icons-material'
 import {images} from '../../assests/Images'
 import SimpleTextField from '../../Components/TextField/SimpleTextField'
 import IconTextField from '../../Components/TextField/IconTextField'
+import axios from 'axios'
 
 import { useNavigate } from 'react-router-dom'
+import { BASE_URL } from '../../Api/ApiConstant'
 
-const Login = () => {
+const Login = ({Auth,setAuth}) => {
 
 
   const [loginFormData,setLoginFormData] = useState(
     {
-      number:'',
-      password:'',
+      PhoneNumber:'',
+      Password:'',
       remember:false
     }
   )
 
 const nav = useNavigate()
 
-
+const [successMsg,setSuccessMsg]=useState(null)
   const [loading,setLoading] = useState(false)
   const [error,setError] = useState(null);
 const [errorBox,setErrorBox]=useState(false)
@@ -28,15 +30,15 @@ const [errorBox,setErrorBox]=useState(false)
   const formSubmitHandler = async (e)=>{
     e.preventDefault();
   
-    const ValidateForm=({number,password})=>{
+    const ValidateForm=({PhoneNumber,Password})=>{
 
-      if(!number || !password)
+      if(!PhoneNumber || !Password)
       {
         setErrorBox(true)
         setError('Plz fiil all fields')
         return false
       }
-      if(password.length<6)
+      if(Password.length<6)
       {
         setErrorBox(true)
         setError('Password length must be greater than 6')
@@ -53,8 +55,45 @@ const [errorBox,setErrorBox]=useState(false)
     const validate = await ValidateForm(loginFormData);
     if(validate)
     {
+      let formData = new FormData();
+      formData.append('PhoneNumber', loginFormData.PhoneNumber);
+      formData.append('Password', loginFormData.Password);
+      formData.append('rememberStatus',loginFormData.remember)
+
+      console.log(formData)
+
      setLoading(true)
+     
+
+    axios.post(`${BASE_URL}/Account/login`,formData).then((res)=>{
+     
+      setSuccessMsg('Login Successfully')
+      setLoading(false)
+      setError(null)
+      setErrorBox(false)
+     localStorage.setItem('loginUser', JSON.stringify(res.data))
+      localStorage.setItem('token', JSON.stringify(res.data?.token))
+     localStorage.setItem('isLoggedIn', JSON.stringify(true))
+     
+      setTimeout(()=>{
+        nav('/home')
+        setAuth(true)
+      },1000)
+      
+    }).catch(({response})=>{
+    
+     
+       setError(response.data.error ? response.data.error : response.data)
+      
+        setErrorBox(true)
+        
+        setLoading(false)
+    })
+       
+   
+   
     }
+
    
     
     }
@@ -62,7 +101,7 @@ const [errorBox,setErrorBox]=useState(false)
 
   return (
    
-    <Box sx={{display:'flex',justifyContent:'start',p:{xs:'0',sm:8},background:'url(https://wallpaperaccess.com/full/33139.jpg) no-repeat center/cover',height:'100vh',}}>
+    <Box sx={{display:'flex',justifyContent:'start',p:{xs:'0',sm:8},background:' linear-gradient(178deg,#F4F5F800,#F4F5F8), url(https://cdn.shopify.com/s/files/1/0334/8565/2108/products/Joan_Asp_Serenity_a2f0647c-8883-4897-9623-fa68baffff4d_2048x.jpg?v=1582005160) no-repeat center/cover',height:'100vh',}}>
          
          <Box sx={{py:2,background:'white',width:{xs:'100%',sm:'490px'},height:{xs:'100%',sm:'700px'},borderRadius:{xs:'0',sm:4},}}>
 
@@ -76,10 +115,10 @@ const [errorBox,setErrorBox]=useState(false)
           <Box sx={{display:'flex',flexDirection:'column',paddingY:'2rem',alignItems:'center',gap:'2rem'}}>
 
           
-          <SimpleTextField data={loginFormData} setData={setLoginFormData} type={'number'} name={'number'} label={'Phone Number'}/>
+          <SimpleTextField data={loginFormData} setData={setLoginFormData} type={'pnumber'} name={'PhoneNumber'} label={'Phone Number'}/>
      
 
-     <IconTextField data={loginFormData} setData={setLoginFormData} iconName={[<VisibilityOutlined/>,<VisibilityOffOutlined/>]} type={'password'}  name={'password'} label={'Password'}/>
+     <IconTextField data={loginFormData} setData={setLoginFormData} iconName={[<VisibilityOutlined/>,<VisibilityOffOutlined/>]} type={'password'}  name={'Password'} label={'Password'}/>
          <Box sx={{display:'flex',width:'90%',justifyContent:'space-between',alignItems:'center'}}>
 
          
@@ -89,7 +128,7 @@ const [errorBox,setErrorBox]=useState(false)
          </Box>
 
        
-         <Button  type='submit'  sx={{width:'50%',height:'44px',background:'#F2956A','&:hover':{background:'rgb(242, 159, 106)'}}} variant={loading ? 'disabled':'contained'}>
+         <Button   type='submit'  sx={{width:'50%',height:'44px',background:'#F2956A','&:hover':{background:'rgb(242, 159, 106)'}}} variant={loading ? 'disabled':'contained'}>
       {
         loading ? <CircularProgress size={30}  color='inherit' />: 'Login'
       }
@@ -112,7 +151,11 @@ const [errorBox,setErrorBox]=useState(false)
         </Alert>
       </Snackbar>
 
-
+      <Snackbar anchorOrigin={{vertical:'top',horizontal:'right'}} open={successMsg?true:false} autoHideDuration={2000} onClose={()=>setSuccessMsg(null)}>
+        <Alert onClose={()=>setErrorBox(false)} severity="success" sx={{ width: '100%' }}>
+          {successMsg}
+        </Alert>
+      </Snackbar>
 
     </Box>
 

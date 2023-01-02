@@ -4,33 +4,24 @@ import Login from './Pages/Login/Login';
 import SignIn from './Pages/SignIn/SignIn';
 import {BrowserRouter as Router,Route,Routes } from 'react-router-dom'
 import Sidebar from './Components/Sidebar/Sidebar';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import Home from './Pages/Home/Home';
+
 function App() {
 
+  const [Auth,setAuth] = useState(false)
   const theme = createTheme({
     palette: {
       secondary: {
         main: 'rgb(242, 149, 106)'
       },
-      transitions: {
-        duration: {
-          shortest: 150,
-          shorter: 200,
-          short: 250,
-          // most basic recommended timing
-          standard: 300,
-          // this is to be used in complex animations
-          complex: 375,
-          // recommended when something is entering screen
-          enteringScreen: 225,
-          // recommended when something is leaving screen
-          leavingScreen: 195,
-        },
-      },
+
   }})
 
-
+  
   const [expand,setExpand] = useState(false)
+
+  const Mystyle = {transitionDuration:'.3s',transitionProperty:'all',marginLeft:{sm:expand?'240px':'64px',xs:'64px'},marginTop:'75px'}
 
 
   return (
@@ -43,18 +34,33 @@ function App() {
   <div style={{width:'100%'}}>
        
         <div >
-          <Sidebar expand={expand} setExpand={setExpand} />
+          {Auth?
+                 <Sidebar expand={expand} setExpand={setExpand} />:null
+          }
+        
          </div>
          
-       <Box  sx={{transitionDuration:'.3s',transitionProperty:'all',marginLeft:{sm:expand?'240px':'64px',xs:'64px'}}}>
-      
+         <Box   sx={Auth ? Mystyle : ''}>
       <Routes>
        
-           <Route path='/' element={<Login/>}/>
+           <Route path='/' element={<Login Auth={Auth} setAuth={setAuth} />}/>
            <Route path='/Signin' element={<SignIn/>}/>
+           <>{
+          Auth ? 
+          
+          
+                <Route path='/home' element={<Home/>}/>
+        
+           :  <Route path='*' element={<Login Auth={Auth} setAuth={setAuth}/>}/>
+          
+           }
+            </>
+       
        </Routes>
-     
        </Box>
+          
+     
+       
      
   </div> 
 </Router>

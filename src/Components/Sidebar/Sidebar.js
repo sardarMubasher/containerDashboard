@@ -5,19 +5,29 @@ import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
-import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import {
+  Menu,
+  ChevronRight,
+  ChevronLeft,
+  ExpandMore
+ 
+} from '@mui/icons-material'
+
+import { SidebarIconList } from './Sub-Components/SidebarIconList';
+import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
+import SidebarSubItems from './Sub-Components/SidebarSubItems';
+import SidebarParentIcon from './Sub-Components/SidebarParentIcon';
+import SingleSideBarIcon from './Sub-Components/SingleSideBarIcon';
+import Topbar from '../Topbar/Topbar';
+import { useNavigate } from 'react-router-dom';
+
 
 const drawerWidth = 240;
 
@@ -75,6 +85,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     flexShrink: 0,
     whiteSpace: 'nowrap',
     boxSizing: 'border-box',
+   
     ...(open && {
       ...openedMixin(theme),
       '& .MuiDrawer-paper': openedMixin(theme),
@@ -93,98 +104,78 @@ export default function MiniDrawer({expand,setExpand}) {
   const handleDrawerOpen = () => {
     setOpen(true);
     setExpand(true)
+
   };
 
   const handleDrawerClose = () => {
     setOpen(false);
     setExpand(false)
+   
   };
 
+ 
   return (
     <Box  sx={{ display: 'flex'}}>
     
-      <AppBar position="fixed" open={open}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{
-              marginRight: 5,
-              ...(open && { display: 'none' }),
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Mini variant drawer
-          </Typography>
-        </Toolbar>
+      <AppBar sx={{backgroundColor:'secondary.bg',boxShadow:'none',zIndex:'1',paddingLeft:open ? '12px':'64px'}} position="fixed" open={open}>
+        <Topbar/>
       </AppBar>
-      <Drawer sx={{width:240}}  variant="permanent" open={open}>
-        <DrawerHeader >
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+      <Drawer PaperProps={{sx:{backgroundColor:'secondary.main',color:'white',}}}  sx={{width:240}}  variant="permanent" open={open}>
+        <DrawerHeader onMouseEnter={()=> open ? handleDrawerOpen():''} sx={{color:'white'}} >
+          <Typography variant='h5'  sx={{marginRight:'86px', opacity: open ? 1 : 0 }}>Arrival</Typography>
+          {!open ?
+          
+              <IconButton
+              onClick={handleDrawerOpen}
+              sx={{
+               color:'white',
+                justifyContent:'center',
+                display: 'flex',
+                ...(open && { display: 'none', }),
+              }}
+            >
+              <Menu />
+            </IconButton> :    <IconButton sx={{color:'white'}} onClick={handleDrawerClose}>
+            {theme.direction === 'rtl' ? <ChevronRight /> : <ChevronLeft />}
           </IconButton>
+          }
+        
         </DrawerHeader>
-        <Box  onMouseOver={handleDrawerOpen}>
         <Divider />
-        <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
+        <Box onMouseLeave={handleDrawerClose} onMouseEnter={handleDrawerOpen}>
+       
+        <List >
+          {SidebarIconList[0].map((data, index) => (
+             <SingleSideBarIcon  key={index} data={data} open={open}/>
           ))}
         </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
+
+        <Typography variant='body1'  sx={{textAlign:'center',mr:open ?'134px' :'',display:!open?'none':'block',mt:2,opacity: open ? 1 : 0}}>System</Typography>
+
+        <List sx={{mt:!open?-2:''}}>
+          {SidebarIconList[1].map((data, index) => (
+             <SingleSideBarIcon key={index} data={data} open={open}/>
           ))}
         </List>
+        
+        {/* Hard COded Data */}
+
+        <Typography variant='body1'  sx={{textAlign:'center',mr:open ?'84px' :'',display:!open?'none':'block',mt:2,opacity: open ? 1 : 0}}>Transportation</Typography>
+
+        <List sx={{mt:!open?-2:''}}>
+          {SidebarIconList[2].map((data, index) => (
+              <SidebarParentIcon key={index} data={data} open={open}  />
+          ))}
+        </List>
+        
+     
         </Box>
+
       </Drawer>
      
-     <Box onMouseOver={handleDrawerClose} sx={{position:'fixed',top:0,width:'100%',height:'100vh'}}>
+     {/* <Box onMouseOver={handleDrawerClose} sx={{position:'fixed',top:0,width:'100%',height:'100vh'}}>
 
-     </Box>
+     </Box> */}
     </Box>
   );
 }

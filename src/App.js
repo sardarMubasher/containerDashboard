@@ -5,23 +5,50 @@ import SignIn from './Pages/SignIn/SignIn';
 import {BrowserRouter as Router,Route,Routes } from 'react-router-dom'
 import Sidebar from './Components/Sidebar/Sidebar';
 import { useEffect, useState } from 'react';
-import Home from './Pages/Home/Home';
-
+import { useSelector } from 'react-redux';
+import { darkMode,userAuth } from './Redux/Redux'; 
+import Users from './Pages/Users/Users';
+import DriverReg from './Pages/DriverRegistration/DriverReg';
 function App() {
 
-  const [Auth,setAuth] = useState(false)
+  const Auth = useSelector((state)=>state.userAuth.value)
+  const darkMode = useSelector((state)=> state.darkMode.value)
   const theme = createTheme({
-    palette: {
-      secondary: {
-        main: 'rgb(242, 149, 106)'
-      },
+    palette:!darkMode  ? {
+          secondary: {
+      main: 'rgb(242, 149, 106)',
+      text:'#555',
+      bg:'#fff',
+      hov:'#e1e2fe',
+    bg2:'#fff',
+    main2: 'rgb(242, 149, 106)',
+    text2:'#D3D3D3'
+        
+    },
+    sepColor:{
+      main: 'rgb(242, 149, 106)'
+    }
+  }:{
+    secondary: {
+main: '#1F2A40',
+text:'#FFFFFF',
+bg:'#141b2d',
+hov:'#2f3e5c',
+bg2:'#1F2A40',
+main2:'#fff',
+text2:'#fff'
+},
+sepColor:{
+  main: '#fff'
+}
+}
+})
 
-  }})
-
+  
   
   const [expand,setExpand] = useState(false)
 
-  const Mystyle = {transitionDuration:'.3s',transitionProperty:'all',marginLeft:{sm:expand?'240px':'64px',xs:'64px'},marginTop:'75px'}
+  const Mystyle = {height:'85%',transitionDuration:'.3s',transitionProperty:'all',marginLeft:{sm:expand?'243px':'68px',xs:'68px'},marginTop:'64px'}
 
 
   return (
@@ -31,27 +58,29 @@ function App() {
 <ThemeProvider theme={theme}>
 
 <Router>
-  <div style={{width:'100%'}}>
+  <Box sx={{width:'100%',height:'100vh',background:darkMode?'#141b2d':'white',overflowY:'auto'}}>
        
-        <div >
+        <Box>
           {Auth?
-                 <Sidebar expand={expand} setExpand={setExpand} />:null
+                 <Sidebar expand={expand} setExpand={setExpand} />:''
           }
         
-         </div>
+         </Box>
          
-         <Box   sx={Auth ? Mystyle : ''}>
+         <Box    sx={Auth ? Mystyle : ''}>
       <Routes>
        
-           <Route path='/' element={<Login Auth={Auth} setAuth={setAuth} />}/>
+           <Route path='/' element={<Login   />}/>
            <Route path='/Signin' element={<SignIn/>}/>
            <>{
           Auth ? 
           
-          
-                <Route path='/home' element={<Home/>}/>
+          <>
+                <Route path='/users' element={<Users/>}/>
+                <Route path='/DriverRegistration' element={<DriverReg/>}/>
+           </>
         
-           :  <Route path='*' element={<Login Auth={Auth} setAuth={setAuth}/>}/>
+           :  <Route path='*' element={<Login/>}/>
           
            }
             </>
@@ -62,7 +91,7 @@ function App() {
      
        
      
-  </div> 
+  </Box> 
 </Router>
 
 

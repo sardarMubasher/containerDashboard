@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
-import {Alert, Box, Button, Checkbox, CircularProgress, createTheme, Divider, FormControl, FormControlLabel, IconButton, InputAdornment, Snackbar, TextField, ThemeProvider, Typography} from '@mui/material'
+import {Alert, Backdrop, Box, Button, Checkbox, CircularProgress, createTheme, Divider, FormControl, FormControlLabel, IconButton, InputAdornment, Snackbar, TextField, ThemeProvider, Typography} from '@mui/material'
 import {  VisibilityOffOutlined, VisibilityOutlined } from '@mui/icons-material'
 import {images} from '../../assests/Images'
 import SimpleTextField from '../../Components/TextField/SimpleTextField'
@@ -8,9 +8,21 @@ import IconTextField from '../../Components/TextField/IconTextField'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../Api/ApiConstant'
+import { darkMode, userAuth } from '../../Redux/Redux'
+import { useDispatch } from 'react-redux'
 
 
 const SignIn = () => {
+
+  const action = userAuth.actions
+  const Daction = darkMode.actions
+
+  const dispatch = useDispatch();
+
+  useEffect(()=>{
+     dispatch(action.switchAuth(false))
+     dispatch(Daction.switchMode(false))
+  },[])
 
 const [signFormData,setSignFormData] = useState(
   {
@@ -105,7 +117,7 @@ if(validate)
 
   setTimeout(()=>{
     nav('/')
-  },300)
+  },800)
 
   
 }).catch(({response})=>{
@@ -124,7 +136,7 @@ if(validate)
 
   return (
    
-    <Box sx={{display:'flex',justifyContent:'end',p:{xs:'0',sm:8},background:' linear-gradient(178deg,#F4F5F800,#F4F5F8), url(https://cdn.shopify.com/s/files/1/0334/8565/2108/products/Joan_Asp_Serenity_a2f0647c-8883-4897-9623-fa68baffff4d_2048x.jpg?v=1582005160) no-repeat center/cover',height:'100vh',}}>
+    <Box sx={{overflow:'scroll',display:'flex',justifyContent:'end',p:{xs:'0',sm:8},background:' linear-gradient(178deg,#F4F5F800,#F4F5F8), url(https://cdn.shopify.com/s/files/1/0334/8565/2108/products/Joan_Asp_Serenity_a2f0647c-8883-4897-9623-fa68baffff4d_2048x.jpg?v=1582005160) no-repeat center/cover',height:'100vh',}}>
     
 
     <Box sx={{py:2,background:'white',width:{xs:'100%',sm:'490px'},minHeight:{xs:'100%',sm:'650px'},borderRadius:{xs:'0',sm:4},}}>
@@ -155,9 +167,7 @@ if(validate)
   
 
     <Button  type='submit'  sx={{width:'50%',height:'44px',background:'#F2956A','&:hover':{background:'rgb(242, 159, 106)'}}} variant={loading ? 'disabled':'contained'}>
-      {
-        loading ? <CircularProgress size={30}  color='inherit' />: 'Sign Up'
-      }
+      Sign Up
     </Button>
 
  
@@ -187,6 +197,13 @@ if(validate)
         </Alert>
       </Snackbar>
 
+      <Backdrop
+  sx={{ color: '#fff', zIndex:2 }}
+  open={loading}
+  
+>
+<CircularProgress color="inherit" />
+</Backdrop>
       
  
 

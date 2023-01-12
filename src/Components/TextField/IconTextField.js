@@ -13,7 +13,7 @@ const IconTextField = ({iconName,label,name,type,data,setData}) => {
   
   
     <TextField onChange={(e)=>setData({...data,[e.target.name]:e.target.value})}
-     color='secondary'  sx={{width:'100%'}}  id="outlined-basic" type={showPass?'text':'password'} label={label} name={name} value={data.name} variant="outlined" />
+     color='secondary'  sx={{width:'100%'}}  id="outlined-basic" type={showPass?'text':'password'} value={data[name]} label={label} name={name}  variant="outlined" />
    
     <IconButton onClick={()=> setShowPass(!showPass)} sx={{position:'absolute',right:'0'}}>
       {iconName[showPass ? 1 : 0]}

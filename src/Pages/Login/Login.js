@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import {Alert, Box, Button, Checkbox, CircularProgress, createTheme, Divider, FormControl, FormControlLabel, IconButton, InputAdornment, Snackbar, TextField, ThemeProvider, Typography} from '@mui/material'
+import React, { useEffect, useState } from 'react'
+import {Alert, Backdrop, Box, Button, Checkbox, CircularProgress, createTheme, Divider, FormControl, FormControlLabel, IconButton, InputAdornment, Snackbar, TextField, ThemeProvider, Typography} from '@mui/material'
 import {VisibilityOutlined,VisibilityOffOutlined } from '@mui/icons-material'
 import {images} from '../../assests/Images'
 import SimpleTextField from '../../Components/TextField/SimpleTextField'
@@ -8,14 +8,40 @@ import axios from 'axios'
 
 import { useNavigate } from 'react-router-dom'
 import { BASE_URL } from '../../Api/ApiConstant'
+import { darkMode, userAuth } from '../../Redux/Redux'
+import { useDispatch, useSelector } from 'react-redux'
 
-const Login = ({Auth,setAuth}) => {
+const Login = () => {
 
+  const action = userAuth.actions
+  const Daction = darkMode.actions
+  const mode = useSelector((state)=>state.darkMode.value)
+
+  const dispatch = useDispatch();
+
+  useEffect(()=>{
+   
+    
+    
+
+     if(localStorage.getItem('token'))
+     {
+      nav('/users')
+      dispatch(action.switchAuth(true))
+     }
+     else{
+      dispatch(action.switchAuth(false))
+      
+     }
+
+   
+  },[])
+ 
 
   const [loginFormData,setLoginFormData] = useState(
     {
-      PhoneNumber:'',
-      Password:'',
+      PhoneNumber:'0123456789',
+      Password:'Pa$$w0rd',
       remember:false
     }
   )
@@ -76,8 +102,8 @@ const [errorBox,setErrorBox]=useState(false)
      localStorage.setItem('isLoggedIn', JSON.stringify(true))
      
       setTimeout(()=>{
-        nav('/home')
-        setAuth(true)
+        dispatch(action.switchAuth(true))
+        nav('/users')
       },1000)
       
     }).catch(({response})=>{
@@ -101,9 +127,9 @@ const [errorBox,setErrorBox]=useState(false)
 
   return (
    
-    <Box sx={{display:'flex',justifyContent:'start',p:{xs:'0',sm:8},background:' linear-gradient(178deg,#F4F5F800,#F4F5F8), url(https://cdn.shopify.com/s/files/1/0334/8565/2108/products/Joan_Asp_Serenity_a2f0647c-8883-4897-9623-fa68baffff4d_2048x.jpg?v=1582005160) no-repeat center/cover',height:'100vh',}}>
+    <Box sx={{display:'flex',alignItems:'center',justifyContent:'start',p:{xs:'0',sm:8},background:' linear-gradient(178deg,#F4F5F800,#F4F5F8), url(https://cdn.shopify.com/s/files/1/0334/8565/2108/products/Joan_Asp_Serenity_a2f0647c-8883-4897-9623-fa68baffff4d_2048x.jpg?v=1582005160) no-repeat center/cover',height:'100vh',}}>
          
-         <Box sx={{py:2,background:'white',width:{xs:'100%',sm:'490px'},height:{xs:'100%',sm:'700px'},borderRadius:{xs:'0',sm:4},}}>
+         <Box sx={{py:2,background:'white',width:{xs:'100%',sm:'490px'},height:{xs:'100%',sm:'500px'},borderRadius:{xs:'0',sm:4},}}>
 
 
              <img style={{marginLeft:'1rem'}} width='120px' height='75px' src={images[0]} alt="logo"/>
@@ -112,13 +138,13 @@ const [errorBox,setErrorBox]=useState(false)
 
             <form onSubmit={formSubmitHandler} sx={{width:'100%'}}>
             
-          <Box sx={{display:'flex',flexDirection:'column',paddingY:'2rem',alignItems:'center',gap:'2rem'}}>
+          <Box sx={{display:'flex',flexDirection:'column',paddingY:'2rem',alignItems:'center',gap:'1.5rem'}}>
 
           
-          <SimpleTextField data={loginFormData} setData={setLoginFormData} type={'pnumber'} name={'PhoneNumber'} label={'Phone Number'}/>
+          <SimpleTextField data={loginFormData} setData={setLoginFormData} type={'number'} name={'PhoneNumber'} label={'Phone Number'}/>
      
 
-     <IconTextField data={loginFormData} setData={setLoginFormData} iconName={[<VisibilityOutlined/>,<VisibilityOffOutlined/>]} type={'password'}  name={'Password'} label={'Password'}/>
+     <IconTextField data={loginFormData} setData={setLoginFormData} iconName={[<VisibilityOutlined/>,<VisibilityOffOutlined/>]} type={'password'}   name={'Password'} label={'Password'}/>
          <Box sx={{display:'flex',width:'90%',justifyContent:'space-between',alignItems:'center'}}>
 
          
@@ -129,9 +155,7 @@ const [errorBox,setErrorBox]=useState(false)
 
        
          <Button   type='submit'  sx={{width:'50%',height:'44px',background:'#F2956A','&:hover':{background:'rgb(242, 159, 106)'}}} variant={loading ? 'disabled':'contained'}>
-      {
-        loading ? <CircularProgress size={30}  color='inherit' />: 'Login'
-      }
+      Login
     </Button>
        
 
@@ -156,7 +180,14 @@ const [errorBox,setErrorBox]=useState(false)
           {successMsg}
         </Alert>
       </Snackbar>
-
+      <Backdrop
+  sx={{ color: '#fff', zIndex:2 }}
+  open={loading}
+  
+>
+<CircularProgress color="secondary" />
+</Backdrop>
+   
     </Box>
 
   )

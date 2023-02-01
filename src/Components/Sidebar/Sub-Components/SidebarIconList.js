@@ -25,7 +25,7 @@ export const SidebarIconList = [
         icon:<Home  sx={{color:'white'}}/>
    },
    {
-    name:'users',
+    name:'Users',
     icon:<Person sx={{color:'white'}}/>
    },
    {

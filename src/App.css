@@ -22,3 +22,30 @@
 	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
 	background-color: inherit;
 }
+
+/* //Driver Page image */ 
+
+#DriverImageUploader{
+	position: absolute;
+	cursor:pointer;
+	width:100%;
+	height:100%;
+	align-items:center;
+	justify-content:center;
+	display:flex;
+
+	
+}
+#DriverImageUploader:hover{
+	background-color: rgba(0,0,0,.5);
+}
+#DriverImageUploader>:nth-child(1)
+{
+	visibility: hidden;
+}
+#DriverImageUploader:hover>:nth-child(1){
+	visibility: visible;
+
+}
+
+

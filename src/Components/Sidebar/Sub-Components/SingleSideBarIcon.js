@@ -2,13 +2,13 @@ import { ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/mater
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 
-const SingleSideBarIcon = ({data,open}) => {
+const SingleSideBarIcon = ({data,open,setOpen}) => {
 
   const nav = useNavigate();
 
   return (
     <ListItem  disablePadding sx={{ display: 'block' }}>
-              <ListItemButton onClick={()=>nav(`/${data.name.split(' ').join('')}`)}
+              <ListItemButton onClick={()=>{nav(`/${data.name.split(' ').join('')}`);setOpen(false)}}
                 sx={{
                   minHeight: 48,
                   justifyContent: open ? 'initial' : 'center',

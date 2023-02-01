@@ -1,4 +1,4 @@
-import { Avatar, Backdrop, Box, Button, CircularProgress, IconButton, Link, Menu, MenuItem, Select, Toolbar, Typography } from '@mui/material'
+import { Avatar, Backdrop, Box, Button, CircularProgress, Divider, IconButton, Link, Menu, MenuItem, Select, Toolbar, Tooltip, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import {ChevronRightOutlined,WbSunnyOutlined,AccountCircleRounded,DarkModeOutlined} from '@mui/icons-material'
 import { useDispatch, useSelector } from 'react-redux'
@@ -77,6 +77,7 @@ setUserInfo(data)
       >
                 <Avatar sx={{width:32,height:32}} src='https://pbs.twimg.com/media/FgYA_RAWQAEWCw3.jpg'/>
       </IconButton>
+ 
       <Menu
         id="demo-positioned-menu"
         aria-labelledby="demo-positioned-button"
@@ -84,21 +85,34 @@ setUserInfo(data)
         open={open}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: 'center',
-          horizontal: 'left',
+          vertical: 'bottom',
+          horizontal: 'center',
         }}
         transformOrigin={{
           vertical: 'top',
-          horizontal: 'right',
+          horizontal: 'center',
         }}
       >
-        <MenuItem disabled sx={{color:'black'}} >{userInfo.userName}</MenuItem>
+     
+        <MenuItem disabled sx={{color:'black'}} >
+          <Box>
+            <Typography>{userInfo?.userName}</Typography>
+            <Typography>{userInfo?.phoneNumber}</Typography>
+
+          </Box>
+        </MenuItem>
+
+           <Divider/>
+
+        <MenuItem value='edit' onClick={()=> {handleClose()}}>Edit Profile</MenuItem>
+        <MenuItem value='edit' onClick={()=> {handleClose()}}>Settings</MenuItem>
 
 
-        <MenuItem value='edit' onClick={()=> {handleClose()}}>Edit</MenuItem>
-        <MenuItem value='logout' onClick={(e)=>{handleClose();logOutHandler()}}>Logout</MenuItem>
-      
+        <Divider/>
+        <MenuItem value='logout' onClick={(e)=>{handleClose();logOutHandler()}}>
+        Logout</MenuItem>
       </Menu>
+      
             
           
             
@@ -119,17 +133,18 @@ setUserInfo(data)
           color: 'secondary.text',
         },
         height:'35px',
+        width:100
       
       
       }}
           value={language}
           onChange={(e)=>setLanguage(e.target.value)}
           displayEmpty>
-          <MenuItem  disabled={language=='english'?true:false} value={'english'}>
+          <MenuItem  sx={{width:100}} disabled={language=='english'?true:false} value={'english'}>
             <Box sx={{display:'flex',alignItems:'center',gap:1}}>
               <Avatar sx={{height:30,width:30}} src='https://www.kindpng.com/picc/m/59-598788_uk-flag-icon-english-language-flag-icon-hd.png'>
               </Avatar>
-              <Typography>Eng</Typography>
+              <Typography>En</Typography>
               </Box>
           </MenuItem>
           <MenuItem disabled={language=='arabic'?true:false}  value={'arabic'}>

@@ -9,6 +9,8 @@ import { useSelector } from 'react-redux';
 import { darkMode,userAuth } from './Redux/Redux'; 
 import Users from './Pages/Users/Users';
 import DriverReg from './Pages/DriverRegistration/DriverReg';
+import EditUser from './Pages/EditUser/EditUser';
+import Dashboard from './Pages/Dashboard/Dashboard';
 function App() {
 
   const Auth = useSelector((state)=>state.userAuth.value)
@@ -76,8 +78,13 @@ sepColor:{
           Auth ? 
           
           <>
-                <Route path='/users' element={<Users/>}/>
+                <Route path='/Dashboard' element={<Dashboard/>}/>
+
+                <Route path='/Users' element={<Users/>}/>
                 <Route path='/DriverRegistration' element={<DriverReg/>}/>
+                <Route path='/EditUser/:id' element={<EditUser/>}/>
+
+
            </>
         
            :  <Route path='*' element={<Login/>}/>

@@ -117,7 +117,7 @@ export default function MiniDrawer({expand,setExpand}) {
   return (
     <Box  sx={{ display: 'flex'}}>
     
-      <AppBar sx={{backgroundColor:'secondary.bg',boxShadow:'none',zIndex:'1',paddingLeft:open ? '12px':'64px'}} position="fixed" open={open}>
+      <AppBar sx={{backgroundColor:'secondary.bg',boxShadow:'none',zIndex:'4',paddingLeft:open ? '12px':'64px'}} position="fixed" open={open}>
         <Topbar/>
       </AppBar>
       <Drawer PaperProps={{sx:{backgroundColor:'secondary.main',color:'white',}}}  sx={{width:240}}  variant="permanent" open={open}>
@@ -146,7 +146,7 @@ export default function MiniDrawer({expand,setExpand}) {
        
         <List >
           {SidebarIconList[0].map((data, index) => (
-             <SingleSideBarIcon  key={index} data={data} open={open}/>
+             <SingleSideBarIcon setOpen={setOpen}  key={index} data={data} open={open}/>
           ))}
         </List>
 
@@ -154,7 +154,7 @@ export default function MiniDrawer({expand,setExpand}) {
 
         <List sx={{mt:!open?-2:''}}>
           {SidebarIconList[1].map((data, index) => (
-             <SingleSideBarIcon key={index} data={data} open={open}/>
+             <SingleSideBarIcon setOpen={setOpen} key={index} data={data} open={open}/>
           ))}
         </List>
         

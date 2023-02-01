@@ -1,4 +1,4 @@
-import { Alert, Avatar, Backdrop, Box, Button, Card, CircularProgress, Divider, FormControl, Grid, IconButton, InputLabel, MenuItem, Select, Snackbar, TextField, Typography } from '@mui/material'
+import { Alert, Avatar, Backdrop, Box, Button, Card, CircularProgress, Divider, Fade, FormControl, Grid, IconButton, InputLabel, MenuItem, Select, Snackbar, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import SimpleTextField from '../../Components/TextField/SimpleTextField'
 import PhoneInput from 'react-phone-input-2'
@@ -6,6 +6,7 @@ import 'react-phone-input-2/lib/style.css'
 import {Add, CameraAlt, Close, FileUpload} from '@mui/icons-material'
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2'
 import FileInput from '../../Components/TextField/FileInput'
+import Header from '../../Components/Header/Header'
 
 
 const DriverReg = () => {
@@ -28,10 +29,10 @@ const DriverReg = () => {
       image:null,
       CarLisenceId:'',
       CarLisenceImage:'',
-      CarLisenceEndDate:'',
+      CarLisenceEndDate:' ',
       DriverLisenceId:'',
       DriverLisenceImage:'',
-      DriverLisenceEndDate:'',
+      DriverLisenceEndDate:' ',
       IdentityNumber:'',
       IdentityImage:'',
       IqamaImage:''
@@ -78,19 +79,33 @@ const DriverReg = () => {
 
 
   return (
+    <>
+    <Box sx={{mx:'auto',px:2,width:{xs:'95%',lg:'90%'}}}>
+    <Typography sx={{fontWeight:'600',mb:{xs:2,md:0},fontSize:{xs:'1.5rem',sm:'2rem',md:'3rem'},color:'secondary.text'}} >Driver Registeration</Typography>
+    </Box>
+
+    
    <Box sx={{width:{xs:'95%',lg:'90%'},mx:'auto',color:'secondary.text',display:'flex',flexDirection:{xs:'column',md:'row'},gap:'4rem',px:2,minHeight:'100%',alignItems:{xs:'center',md:'flex-start'},pt:{xs:0,md:4}}}>
 
     
-      <Card  elevation={3} sx={{minWidth:{xs:'40%',sm:'40%',lg:'30%'},height:{xs:150,md:350,lg:400},display:'flex',justifyContent:'center',alignItems:'center',backgroundColor:'secondary.bg2',flexDirection:'column',pt:'8px',gap:'1rem',borderRadius:2}}>
-           
-           <Avatar sx={{width:{xs:100,lg:200},height:{xs:100,lg:200},border:'2px solid',borderColor:'secondary.text'}} 
-           src={DriverData.image ? URL.createObjectURL(DriverData.image) : 
+      <Card  elevation={0} sx={{minWidth:{xs:'35%',sm:'40%',lg:'30%'},minHeight:{xs:200,md:560},display:'flex',justifyContent:'center',alignItems:'center',backgroundColor:'secondary.bg2',flexDirection:'column',boxShadow:'1px 4px 10px 3px rgb(0,0,0,0.1)',pt:'8px',gap:'1rem',borderRadius:6,color:'secondary.text'}}>
+        
+           <Avatar sx={{position:'relative',width:{xs:100,md:300},height:{xs:100,md:300},outline:'2px solid',outlineColor:'inherit',color:'secondary.text',backgroundColor:'transparent'}} 
+          >
+            <img style={{width:'100%'}}  src={DriverData.image ? URL.createObjectURL(DriverData.image) : 
            'https://images.pexels.com/photos/1704488/pexels-photo-1704488.jpeg?cs=srgb&dl=pexels-suliman-sallehi-1704488.jpg&fm=jpg'}/>
-      
-           <label style={{cursor:'pointer'}} htmlFor='image'>
-              <CameraAlt sx={{color:'secondary.text'}} fontSize='medium'/>
+
+             <label id='DriverImageUploader' htmlFor='image'>
+              <CameraAlt sx={{color:'white'}} fontSize='medium'/>
            </label>
+            
+           </Avatar>
+          <Typography sx={{width:{xs:'80%',sm:'50%'},textAlign:'center'}}>Allowed *.jpeg, *.jpg, *.png, *.gif
+max size of 3.1 MB</Typography>
          <input id='image' style={{display:'none'}} onChange={(e)=>setDriverData({...DriverData,image:e.target.files[0]})} accept='image/*' type='file'/>
+
+      
+         
          
      </Card>
 
@@ -98,12 +113,15 @@ const DriverReg = () => {
          
    
      <form onSubmit={formSubmitHandler} style={{display:'flex',justifyContent:'center'}}>
-    <Grid  container spacing={2} sx={{minWidth:'70%',boxShadow:'1px 4px 10px 3px rgb(0,0,0,0.1)',minHeight:{xs:700,md:700},py:3,borderRadius:3,color:'secondary.text',backgroundColor:'secondary.bg2',mt:{xs:0,md:0}}}>
+    <Grid  container spacing={2} sx={{minWidth:'70%',boxShadow:'1px 4px 10px 3px rgb(0,0,0,0.1)',minHeight:{xs:700,md:300},py:1,borderRadius:6,color:'secondary.text',backgroundColor:'secondary.bg2',mt:0}}>
 
       <Grid  sx={{display:'flex',mb:1,justifyContent:'center',gap:'1rem'}} item xs={11.4}>
        
+      
       <Card onClick={()=>setDriverType('Saudi')} elevation={4} sx={{cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',width:'30%',borderRadius:'4px',height:'45px',bgcolor:driverType=='Saudi'?'secondary.main2':'inherit'}}>
+     
         <Typography sx={{textAlign:'center',margin:'0',color:driverType=='Saudi'?'var(--textColor)':'secondary.text'}}>Saudi</Typography>
+      
         </Card>
 
         <Card onClick={()=>setDriverType('Foreigner')} elevation={4} sx={{cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',width:'30%',borderRadius:'4px',height:'45px',bgcolor:driverType!='Saudi'?'secondary.main2':'inherit'}}>
@@ -170,8 +188,8 @@ id="demo-simple-select-label">Gender</InputLabel>
 
   <Grid item xs={12} sm={4}>
 
-<PhoneInput inputStyle={{backgroundColor:'inherit',color:'inherit',height:'55px',width:'90%',}}
- buttonStyle={{backgroundColor:'inherit',}}
+<PhoneInput inputStyle={{backgroundColor:'inherit',color:'inherit',height:'55px',width:'90%',borderRadius:'12px'}}
+ buttonStyle={{backgroundColor:'inherit',borderRadius:'12px 0 0 12px'}}
  dropdownStyle={{color:'black'}}
   country={'us'}
   onChange={(e)=>setDriverData({...DriverData,PhoneNumber:e})}
@@ -182,48 +200,41 @@ id="demo-simple-select-label">Gender</InputLabel>
 
 {/* Lisence Car details */}
 
-<Grid sx={{mb:-2}} item xs={12}>
+<Grid sx={{mt:-1}} item xs={12}>
 <Typography sx={{fontWeight:'600'}}>Car Lisence</Typography>
 </Grid>
-  <Grid item xs={12} sm={4}>
-  <Typography>Id</Typography>
-
-  <SimpleTextField data={DriverData} setData={setDriverData}  type={'text'} name={'CarLisenceId'} label={''}/>
+  <Grid sx={{mt:-2}} item xs={12} sm={4}>
+  <SimpleTextField data={DriverData} setData={setDriverData}  type={'text'} name={'CarLisenceId'} label={'Id'}/>
   </Grid>
  
 
-  <Grid item xs={12} sm={4}>
-  <Typography>Image</Typography>
-  <FileInput data={DriverData} setData={setDriverData}  type={'file'} name={'CarLisenceImage'} label={''}/>
+  <Grid sx={{mt:-2}} item xs={12} sm={4}>
+  <FileInput data={DriverData} setData={setDriverData}  type={'file'} name={'CarLisenceImage'} label={'Image'}/>
   </Grid>
 
-  <Grid item xs={12} sm={4}>
-  <Typography> End date</Typography>
-  <SimpleTextField data={DriverData} setData={setDriverData}  type={'date'} name={'CarLisenceEndDate'} label={''}/>
+  <Grid sx={{mt:-2}} item xs={12} sm={4}>
+  <SimpleTextField data={DriverData} setData={setDriverData}  type={'date'} name={'CarLisenceEndDate'} label={'End date'}/>
   </Grid>
 
 {/* Lisence Driver details */}
 
 
-  <Grid sx={{mb:-2}} item xs={12}>
+  <Grid sx={{mt:-1}} item xs={12}>
 <Typography  sx={{fontWeight:'600'}}>Driver Lisence</Typography>
 </Grid>
-  <Grid item xs={12} sm={4}>
-  <Typography>Id</Typography>
+  <Grid sx={{mt:-2}} item xs={12} sm={4}>
 
-  <SimpleTextField data={DriverData} setData={setDriverData}  type={'text'} name={'DriverLisenceId'} label={''}/>
+  <SimpleTextField data={DriverData} setData={setDriverData}  type={'text'} name={'DriverLisenceId'} label={'Id'}/>
   </Grid>
  
 
-  <Grid item xs={12} sm={4}>
-  <Typography>Image</Typography>
-  <FileInput data={DriverData} setData={setDriverData}  type={'file'} name={'DriverLisenceImage'} label={''}/>
+  <Grid sx={{mt:-2}} item xs={12} sm={4}>
+  <FileInput data={DriverData} setData={setDriverData}  type={'file'} name={'DriverLisenceImage'} label={'Image'}/>
   
   </Grid>
 
-  <Grid sx={{mb:2}} item xs={12} sm={4}>
-  <Typography> End date</Typography>
-  <SimpleTextField data={DriverData} setData={setDriverData}  type={'date'} name={'DriverLisenceEndDate'} label={''}/>
+  <Grid sx={{mt:-2}}  item xs={12} sm={4}>
+  <SimpleTextField data={DriverData} setData={setDriverData}  type={'date'} name={'DriverLisenceEndDate'} label={'End date'}/>
   </Grid>
 
   {/*Driver Based Info*/}
@@ -231,22 +242,28 @@ id="demo-simple-select-label">Gender</InputLabel>
  {
   driverType=='Saudi' ?
  <>
-  <Grid item xs={12} sm={4}>
-  <Typography>Id Number</Typography>
+ <Grid sx={{mt:-1}} item xs={12}>
+<Typography  sx={{fontWeight:'600'}}>Identity</Typography>
+</Grid>
+  <Grid sx={{mt:-1}} item xs={12} sm={4}>
 
-  <SimpleTextField data={DriverData} setData={setDriverData}  type={'text'} name={'IdentityNumber'} label={''}/>
+  <SimpleTextField data={DriverData} setData={setDriverData}  type={'text'} name={'IdentityNumber'} label={'Id'}/>
   </Grid>
  
 
-  <Grid item xs={12} sm={4}>
-  <Typography>Id Image</Typography>
-  <FileInput data={DriverData} setData={setDriverData}  type={'file'} name={'IdentityImage'} label={''}/>
+  <Grid sx={{mt:-1}} item xs={12} sm={4}>
+  <FileInput data={DriverData} setData={setDriverData}  type={'file'} name={'IdentityImage'} label={'Id Image'}/>
   </Grid>
   </>
-  : <Grid item xs={12} sm={4}>
-  <Typography>Iqama Image</Typography>
-  <FileInput data={DriverData} setData={setDriverData}  type={'file'} name={'IqamaImage'} label={''}/>
-  </Grid>}
+  : <>
+  <Grid sx={{mt:-1}}  item xs={12}>
+<Typography  sx={{fontWeight:'600'}}>Iqama</Typography>
+</Grid>
+  <Grid  sx={{mt:-1}} item xs={12} sm={4}>
+  <FileInput data={DriverData} setData={setDriverData}  type={'file'} name={'IqamaImage'} label={'Iqama Image'}/>
+  </Grid>
+  </>}
+
 
 
 
@@ -255,7 +272,7 @@ id="demo-simple-select-label">Gender</InputLabel>
 
 
 <Grid sx={{display:'flex',justifyContent:'end',alignItems:'start',px:5}} item xs={12}>
-<Button color='sepColor' sx={{color:'secondary.bg'}} type='submit'  variant='contained'>Register</Button>
+<Button color='sepColor' sx={{color:'secondary.bg',borderRadius:6}} type='submit'  variant='contained'>Register</Button>
 </Grid>
 
 
@@ -286,6 +303,7 @@ id="demo-simple-select-label">Gender</InputLabel>
 </Backdrop> */}
    
    </Box>
+   </>
   )
 }
 

@@ -24,6 +24,7 @@ export const userAuth = createSlice(
         name:'userAuth',
         initialState:{
             value:localStorage.getItem('isLoggedIn'),
+            
         },
         reducers:{
             switchAuth:(state,Action)=>{

@@ -21,13 +21,10 @@ const Login = () => {
 
   useEffect(()=>{
    
-    
-    
-
      if(localStorage.getItem('token'))
      {
-      nav('/users')
-      dispatch(action.switchAuth(true))
+       dispatch(action.switchAuth(true))
+       nav('/Dashboard')
      }
      else{
       dispatch(action.switchAuth(false))
@@ -103,7 +100,7 @@ const [errorBox,setErrorBox]=useState(false)
      
       setTimeout(()=>{
         dispatch(action.switchAuth(true))
-        nav('/users')
+        nav('/Dashboard')
       },1000)
       
     }).catch(({response})=>{
@@ -145,7 +142,8 @@ const [errorBox,setErrorBox]=useState(false)
      
 
      <IconTextField data={loginFormData} setData={setLoginFormData} iconName={[<VisibilityOutlined/>,<VisibilityOffOutlined/>]} type={'password'}   name={'Password'} label={'Password'}/>
-         <Box sx={{display:'flex',width:'90%',justifyContent:'space-between',alignItems:'center'}}>
+       
+         <Box sx={{display:'flex',mt:-1,width:'90%',justifyContent:'space-between',alignItems:'center'}}>
 
          
           <Typography  sx={{cursor:'pointer',color:'#F2956A'}}>Forgot Password</Typography>

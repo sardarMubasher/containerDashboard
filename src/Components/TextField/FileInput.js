@@ -5,9 +5,9 @@ import React from 'react'
 
 const FileInput = ({type,data,name,label,setData}) => {
   return (
-    <Box sx={{display:'flex',width:'90%',alignItems:'center',borderRadius:'8px',px:1,
+    <Box sx={{display:'flex',width:'90%',alignItems:'center',borderRadius:'12px',px:1,
     border:'1px solid',borderColor:'secondary.text2',justifyContent:'space-between'}}>
-  <Typography>{data[name]?data[name].name.substr(0,8)+"...":'Select File'}</Typography>
+  <Typography>{data[name]?data[name].name.substr(0,8)+"...":'Select Image'}</Typography>
   <IconButton sx={{cursor:'pointer'}}> 
   <label htmlFor={name}>
     <Avatar sx={{bgcolor:'secondary.main2'}}>

@@ -4,7 +4,8 @@ import { BASE_URL } from '../../Api/ApiConstant';
 import { Box } from '@mui/system';
 import Header from '../../Components/Header/Header';
 import { Avatar, Button, CircularProgress, IconButton, LinearProgress, Menu, MenuItem, Modal, Typography } from '@mui/material';
-import {MoreVert} from '@mui/icons-material'
+import {Delete, Edit, MoreVert} from '@mui/icons-material'
+import { useNavigate } from 'react-router-dom';
 
 
 export default function DataTable() {
@@ -12,6 +13,7 @@ export default function DataTable() {
     const [userList,setUserList] = useState([])
     const [loading,setLoading] = useState(true)
     const [DeleteBox,setDeleteBox]=useState(false)
+    const nav = useNavigate()
   
     useEffect(() => {
         getUsersData()
@@ -52,7 +54,7 @@ export default function DataTable() {
     const columns = [
       {field: "id", headerName: "ID", flex: 1},
 
-      {field: "imageUrl", headerName: "Image",
+      {field: "imageUrl", headerName: "Image",flex:.3,
       renderCell: (params) => {
           
           return (
@@ -64,7 +66,10 @@ export default function DataTable() {
               
             </>
           );
-        }
+        },
+        sortable:false,
+        disableColumnMenu:true,
+        
 
   },
       {
@@ -78,7 +83,12 @@ export default function DataTable() {
           flex: 1,
       },
       {
-      
+        field: "phoneNumber",
+        headerName: "Phone Nuber",
+        flex: 1,
+    },
+      {
+         
           field:'roles',
           headerName: "Role",
           renderCell: (field) => {
@@ -89,11 +99,16 @@ export default function DataTable() {
                
               );
        
-      }
+      },
+      sortable:false,
+      disableColumnMenu:true,
+      
   },
   {
-    
-   
+    headerClassName: 'lastcolumnSeparator',
+    sortable:false,
+    disableColumnMenu:true,
+   flex:.2,
     renderCell: (field) => {
       const [anchorEl, setAnchorEl] = useState(null);
       const open = Boolean(anchorEl);
@@ -130,8 +145,8 @@ export default function DataTable() {
           horizontal: 'right',
         }}
       >
-        <MenuItem onClick={()=>{handleClose();console.log(field.row)}}>Edit</MenuItem>
-        <MenuItem onClick={()=>{handleClose();setDeleteBox(true)}}>Delete</MenuItem>
+        <MenuItem onClick={()=>{handleClose();nav(`/EditUser/${field.row.username}`)}}><Edit sx={{mr:1}} fontSize='small'/> Edit</MenuItem>
+        <MenuItem onClick={()=>{handleClose();setDeleteBox(true)}}><Delete sx={{mr:1}} fontSize='small' color='error'/> Delete</MenuItem>
       
       </Menu>
     
@@ -151,13 +166,14 @@ export default function DataTable() {
 
 
 
-        <Box sx={{width:1200,height:'500px',mx:'auto',mt:2,color:'secondary.text',
+        <Box sx={{width:1200,height:'500px',mx:'auto',mt:1,color:'secondary.text',
          "& .MuiDataGrid-root": {
             border: "none",
             color:'secondary.text'
         },
         "& .MuiDataGrid-cell": {
             borderBottom: "secondary.text",
+
         },
         "& .name-column--cell": {
             color: 'secondary.text',
@@ -165,9 +181,11 @@ export default function DataTable() {
         "& .MuiDataGrid-columnHeaders": {
             backgroundColor: 'secondary.main',
             borderBottom: "none",
+            borderRadius:'22px 22px 0 0',
         },
         "& .MuiDataGrid-virtualScroller": {
             backgroundColor: "transparent",
+            
         },
         "& .MuiDataGrid-footerContainer": {
             borderTop: "none",
@@ -188,13 +206,19 @@ export default function DataTable() {
           {
             color:'secondary.text',
 
+          },
+          '.MuiDataGrid-columnSeparator': {
+           color:'secondary.text !important'
+          },
+          '.lastcolumnSeparator .MuiDataGrid-columnSeparator--sideRight' :{
+            display: 'none !important'
           }
           }}>
 
-            <Header title={'User'} subtitle={'Users List'}/>
+            <Header title={'Users'} subtitle={'Users List'}/>
 
       {
-        !loading ?   <DataGrid  sx={{color:'secondary.text',boxShadow:'1px 4px 10px 3px rgb(0,0,0,0.2)', '& .MuiDataGrid-row:hover': {
+        !loading ?   <DataGrid  sx={{borderRadius:'22px',color:'secondary.text',boxShadow:'1px 4px 10px 3px rgb(0,0,0,0.2)', '& .MuiDataGrid-row:hover': {
           backgroundColor: 'secondary.hov',
         },}}
         rows={userList}
@@ -205,6 +229,7 @@ export default function DataTable() {
         autoHeight
         
         getRowId={userList.id}
+        
        
         
       />:<Box>
@@ -220,7 +245,7 @@ export default function DataTable() {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '50%',
+  width:{xs:'80%',sm:'60%',md:'30%'},
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,}}>
